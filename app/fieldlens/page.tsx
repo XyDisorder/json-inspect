@@ -44,6 +44,7 @@ const FieldLensPage = () => {
   const [jsonVersion, setJsonVersion] = useState(0);
   const [activeTab, setActiveTab] = useState<string>(tabs[0].id);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [panelMode, setPanelMode] = useState<"split" | "input" | "output">("split");
 
   const tree = useMemo(() => buildTree(jsonValue), [jsonValue]);
   const paths = useMemo(() => jsonToPaths(jsonValue), [jsonValue]);
@@ -63,12 +64,57 @@ const FieldLensPage = () => {
           <p className="text-slate-400">Paste JSON - Explore - Generate Types</p>
         </header>
 
-        <section className="grid gap-8 lg:grid-cols-2">
-          <div className="rounded-3xl border border-white/10 bg-surface-raised/80 p-6 shadow-glow">
+        <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
+          <span className="uppercase tracking-[0.2em] text-emerald-300">Panel layout</span>
+          <div className="flex rounded-full border border-white/10 bg-black/30 p-1 text-white">
+            <button
+              type="button"
+              onClick={() => setPanelMode("input")}
+              className={`rounded-full px-3 py-1 transition ${
+                panelMode === "input" ? "bg-emerald-400/20 text-white" : "text-slate-400"
+              }`}
+            >
+              Focus Input
+            </button>
+            <button
+              type="button"
+              onClick={() => setPanelMode("split")}
+              className={`rounded-full px-3 py-1 transition ${
+                panelMode === "split" ? "bg-emerald-400/20 text-white" : "text-slate-400"
+              }`}
+            >
+              Split
+            </button>
+            <button
+              type="button"
+              onClick={() => setPanelMode("output")}
+              className={`rounded-full px-3 py-1 transition ${
+                panelMode === "output" ? "bg-emerald-400/20 text-white" : "text-slate-400"
+              }`}
+            >
+              Focus Output
+            </button>
+          </div>
+        </div>
+
+        <section
+          className={`grid gap-8 ${
+            panelMode === "split" ? "lg:grid-cols-2" : "grid-cols-1"
+          }`}
+        >
+          <div
+            className={`rounded-3xl border border-white/10 bg-surface-raised/80 p-6 shadow-glow ${
+              panelMode === "output" ? "hidden" : ""
+            }`}
+          >
             <JsonInput initialValue={defaultText} onJsonChange={handleJsonChange} />
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-surface-raised/80 p-6 shadow-glow">
+          <div
+            className={`rounded-3xl border border-white/10 bg-surface-raised/80 p-6 shadow-glow ${
+              panelMode === "input" ? "hidden" : ""
+            }`}
+          >
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
               <label className="flex w-full max-w-xs items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1 text-sm text-slate-300 focus-within:border-emerald-300 focus-within:text-white">
