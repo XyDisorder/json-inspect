@@ -35,28 +35,62 @@ const JsonInput = ({ initialValue, onJsonChange }: JsonInputProps) => {
   const safeMatchIndex =
     matchCount === 0 ? 0 : ((matchIndex % matchCount) + matchCount) % matchCount;
 
-  const highlightSegments = useMemo(() => {
+  type HighlightSegment = {
+    text: string;
+    highlight: boolean;
+    matchIndex: number | null;
+  };
+
+  const highlightSegments = useMemo<HighlightSegment[]>(() => {
     if (!normalizedSearch) {
-      return [{ text: value || "\u200B", highlight: false }];
+      return [{ text: value || "\u200B", highlight: false, matchIndex: null }];
     }
     const regex = new RegExp(`(${escapeRegex(normalizedSearch)})`, "gi");
     const parts = value.split(regex);
-    return parts.map((segment, index) => ({
-      text: segment === "" ? "\u200B" : segment,
-      highlight: index % 2 === 1,
-    }));
+    let matchCounter = -1;
+    return parts.map((segment, index) => {
+      const highlight = index % 2 === 1;
+      const text = segment === "" ? "\u200B" : segment;
+      const matchIndex = highlight ? (matchCounter += 1) : null;
+      return { text, highlight, matchIndex };
+    });
   }, [normalizedSearch, value]);
+
+  const matchRefs = useRef<Array<HTMLSpanElement | null>>([]);
 
   const selectMatch = (index: number) => {
     if (!matchCount || !normalizedSearch) return;
     const textarea = textareaRef.current;
-    if (!textarea) return;
-    const start = matches[index];
-    const end = start + normalizedSearch.length;
-    requestAnimationFrame(() => {
-      textarea.focus();
-      textarea.setSelectionRange(start, end);
-    });
+    const overlay = highlightRef.current;
+    if (!textarea || !overlay) return;
+    const targetMark = matchRefs.current[index];
+    const wasTextareaFocused = typeof document !== "undefined" && document.activeElement === textarea;
+
+    if (targetMark) {
+      const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
+      const targetTop =
+        targetMark.offsetTop - overlay.offsetTop - overlay.clientHeight / 2 + targetMark.clientHeight / 2;
+      const maxScrollTop = textarea.scrollHeight - textarea.clientHeight;
+      const clampedTop = clamp(targetTop, 0, maxScrollTop);
+      overlay.scrollTop = clampedTop;
+      textarea.scrollTop = clampedTop;
+
+      const targetLeft =
+        targetMark.offsetLeft - overlay.offsetLeft - overlay.clientWidth / 2 + targetMark.clientWidth / 2;
+      const maxScrollLeft = textarea.scrollWidth - textarea.clientWidth;
+      const clampedLeft = clamp(targetLeft, 0, Math.max(0, maxScrollLeft));
+      overlay.scrollLeft = clampedLeft;
+      textarea.scrollLeft = clampedLeft;
+    }
+
+    if (wasTextareaFocused) {
+      const start = matches[index];
+      const end = start + normalizedSearch.length;
+      requestAnimationFrame(() => {
+        textarea.focus({ preventScroll: true });
+        textarea.setSelectionRange(start, end);
+      });
+    }
   };
 
   const goToMatch = (direction: 1 | -1) => {
@@ -158,7 +192,12 @@ const JsonInput = ({ initialValue, onJsonChange }: JsonInputProps) => {
               segment.highlight ? (
                 <mark
                   key={`${segment.text}-${index}`}
-                  className="rounded bg-amber-300/70 px-0.5 text-transparent"
+                  ref={(element) => {
+                    if (segment.matchIndex !== null) {
+                      matchRefs.current[segment.matchIndex] = element;
+                    }
+                  }}
+                  className="rounded bg-[#ffe600] px-0.5 text-transparent shadow-[0_0_0_1px_rgba(0,0,0,0.35)]"
                 >
                   {segment.text}
                 </mark>
