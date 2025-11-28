@@ -6,6 +6,7 @@
 - 🛣️ **List all paths** in dot-notation (`user.address.city`)  
 - 🛠️ **Generate TypeScript types** automatically  
 - 📐 **View minimal schemas** for objects & arrays  
+- 🔄 **Compare two JSON** side-by-side with visual diff (GitHub-style)
 - ⚡ **Work instantly** as you paste JSON (no backend, no login)
 
 Perfect for backend devs, frontend devs, data engineers, or anyone dealing with messy JSON daily.
@@ -34,11 +35,19 @@ Output a clean, readable `type Root = { ... }`.
 ### 📐 5. Schema View  
 Minimal, human-friendly schema for quick understanding.
 
-### 🧪 6. 100% Client-Side  
+### 🔄 6. JSON Comparison  
+Compare two JSON side-by-side with:
+- **Visual diff view** (GitHub-style) with line-by-line comparison
+- **Color-coded differences**: added (green), removed (red), modified (amber)
+- **Filterable results** by difference type
+- **Synchronized scrolling** between both JSONs
+- **Edit and Diff modes** to switch between editing and viewing differences
+
+### 🧪 7. 100% Client-Side  
 No backend.  
 Your data never leaves your machine.
 
-### 🎨 7. Clean, minimal UI  
+### 🎨 8. Clean, minimal UI  
 Modern TailwindCSS interface with smooth interactions & tabs.
 
 ---
