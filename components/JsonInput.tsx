@@ -6,11 +6,17 @@ import type { JsonValue } from "@/lib/treeBuilder";
 type JsonInputProps = {
   initialValue: string;
   onJsonChange: (value: JsonValue) => void;
+  onTextChange?: (text: string) => void;
 };
 
-const JsonInput = ({ initialValue, onJsonChange }: JsonInputProps) => {
+const JsonInput = ({ initialValue, onJsonChange, onTextChange }: JsonInputProps) => {
   const [value, setValue] = useState(initialValue);
   const [error, setError] = useState<string | null>(null);
+
+  // Synchroniser avec initialValue si elle change
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
   const [searchTerm, setSearchTerm] = useState("");
   const [matchIndex, setMatchIndex] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -57,7 +63,7 @@ const JsonInput = ({ initialValue, onJsonChange }: JsonInputProps) => {
     });
   }, [normalizedSearch, value]);
 
-  const matchRefs = useRef<Array<HTMLMarkElement | null>>([]);
+  const matchRefs = useRef<Array<HTMLElement | null>>([]);
   const shouldSelectMatch = useRef(false);
 
   // Réinitialiser les refs quand les segments changent
@@ -138,6 +144,7 @@ const JsonInput = ({ initialValue, onJsonChange }: JsonInputProps) => {
 
   const handleValueChange = (nextValue: string) => {
     setValue(nextValue);
+    onTextChange?.(nextValue);
     try {
       const parsed = JSON.parse(nextValue) as JsonValue;
       setError(null);

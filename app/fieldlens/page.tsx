@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import JsonInput from "@/components/JsonInput";
 import JsonPaths from "@/components/JsonPaths";
 import JsonTree from "@/components/JsonTree";
@@ -42,15 +42,64 @@ const tabs = [
   { id: "schema", label: "Schema" },
 ];
 
+const STORAGE_KEYS = {
+  inspector: "fieldlens-inspector-json",
+  compareLeft: "fieldlens-compare-left-json",
+  compareRight: "fieldlens-compare-right-json",
+};
+
 const FieldLensPage = () => {
+  // Initialiser avec des valeurs par défaut pour éviter les problèmes d'hydratation
+  const [inspectorJsonText, setInspectorJsonText] = useState<string>(defaultText);
   const [jsonValue, setJsonValue] = useState<JsonValue>(defaultJson);
   const [jsonVersion, setJsonVersion] = useState(0);
   const [activeTab, setActiveTab] = useState<string>(tabs[0].id);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [panelMode, setPanelMode] = useState<"split" | "input" | "output">("split");
   const [compareMode, setCompareMode] = useState(false);
+  const [leftCompareText, setLeftCompareText] = useState<string>("");
+  const [rightCompareText, setRightCompareText] = useState<string>("");
   const [leftCompareJson, setLeftCompareJson] = useState<JsonValue | null>(null);
   const [rightCompareJson, setRightCompareJson] = useState<JsonValue | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Charger depuis localStorage après le montage pour éviter les problèmes d'hydratation
+  useEffect(() => {
+    setIsMounted(true);
+    if (typeof window !== "undefined") {
+      // Charger inspector JSON
+      const savedInspector = localStorage.getItem(STORAGE_KEYS.inspector);
+      if (savedInspector) {
+        setInspectorJsonText(savedInspector);
+        try {
+          setJsonValue(JSON.parse(savedInspector) as JsonValue);
+        } catch {
+          // Ignore invalid JSON
+        }
+      }
+
+      // Charger compare JSON
+      const savedLeft = localStorage.getItem(STORAGE_KEYS.compareLeft);
+      if (savedLeft) {
+        setLeftCompareText(savedLeft);
+        try {
+          setLeftCompareJson(JSON.parse(savedLeft) as JsonValue);
+        } catch {
+          // Ignore invalid JSON
+        }
+      }
+
+      const savedRight = localStorage.getItem(STORAGE_KEYS.compareRight);
+      if (savedRight) {
+        setRightCompareText(savedRight);
+        try {
+          setRightCompareJson(JSON.parse(savedRight) as JsonValue);
+        } catch {
+          // Ignore invalid JSON
+        }
+      }
+    }
+  }, []);
 
   const tree = useMemo(() => buildTree(jsonValue), [jsonValue]);
   const paths = useMemo(() => jsonToPaths(jsonValue), [jsonValue]);
@@ -60,9 +109,41 @@ const FieldLensPage = () => {
     if (!leftCompareJson || !rightCompareJson) return [];
     return compareJson(leftCompareJson, rightCompareJson);
   }, [leftCompareJson, rightCompareJson]);
+  const handleInspectorTextChange = (text: string) => {
+    setInspectorJsonText(text);
+    if (typeof window !== "undefined") {
+      if (text) {
+        localStorage.setItem(STORAGE_KEYS.inspector, text);
+      } else {
+        localStorage.removeItem(STORAGE_KEYS.inspector);
+      }
+    }
+  };
+
+
   const handleJsonChange = (value: JsonValue) => {
     setJsonValue(value);
     setJsonVersion((prev) => prev + 1);
+  };
+
+  const handleLeftCompareChange = (value: JsonValue | null) => {
+    setLeftCompareJson(value);
+    if (value) {
+      const jsonString = JSON.stringify(value, null, 2);
+      setLeftCompareText(jsonString);
+    } else {
+      setLeftCompareText("");
+    }
+  };
+
+  const handleRightCompareChange = (value: JsonValue | null) => {
+    setRightCompareJson(value);
+    if (value) {
+      const jsonString = JSON.stringify(value, null, 2);
+      setRightCompareText(jsonString);
+    } else {
+      setRightCompareText("");
+    }
   };
 
   return (
@@ -139,9 +220,13 @@ const FieldLensPage = () => {
           <section className="space-y-6">
             <div className="rounded-3xl border border-white/10 bg-surface-raised/80 p-6 shadow-glow">
               <JsonCompareInput
-                onLeftChange={setLeftCompareJson}
-                onRightChange={setRightCompareJson}
+                onLeftChange={handleLeftCompareChange}
+                onRightChange={handleRightCompareChange}
                 diffs={compareDiffs}
+                initialLeftValue={leftCompareText}
+                initialRightValue={rightCompareText}
+                storageKeyLeft={STORAGE_KEYS.compareLeft}
+                storageKeyRight={STORAGE_KEYS.compareRight}
               />
             </div>
             {leftCompareJson && rightCompareJson && (
@@ -165,7 +250,11 @@ const FieldLensPage = () => {
                 panelMode === "output" ? "hidden" : ""
               }`}
             >
-              <JsonInput initialValue={defaultText} onJsonChange={handleJsonChange} />
+              <JsonInput
+                initialValue={inspectorJsonText}
+                onJsonChange={handleJsonChange}
+                onTextChange={handleInspectorTextChange}
+              />
             </div>
 
             <div

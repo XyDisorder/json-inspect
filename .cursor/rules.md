@@ -139,6 +139,10 @@ Cursor must:
 - Add short comments only when needed
 - Respect the architecture boundaries
 - Prefer readability over cleverness
+- clean architecture, reusable components and funtions.
+- if frontend, must be clean components too.
+- use utils - mapper if necessary
+- clean separation of responsability
 
 =====================================================
 =                    AI INSTRUCTIONS                =
@@ -148,8 +152,10 @@ When generating code:
 2. Produce a short internal plan BEFORE writing the diff.
 3. Modify only relevant files.
 4. Never break existing behavior.
-5. Ask a clarification question if the request conflicts with these rules.
+5. Ask a clarification question if the request conflicts 
+with these rules.
+6. all code comments must be in english
 
 =====================================================
 =                     END OF RULES                  =
-=====================================================
+=====================================================)

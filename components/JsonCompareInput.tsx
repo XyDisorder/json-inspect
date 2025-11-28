@@ -1,20 +1,70 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { JsonValue } from "@/lib/treeBuilder";
 import type { JsonDiff } from "@/lib/jsonCompare";
+import JsonDiffView from "@/components/JsonDiffView";
 
 type JsonCompareInputProps = {
   onLeftChange: (value: JsonValue | null) => void;
   onRightChange: (value: JsonValue | null) => void;
   diffs?: JsonDiff[];
+  initialLeftValue?: string;
+  initialRightValue?: string;
+  storageKeyLeft?: string;
+  storageKeyRight?: string;
 };
 
-const JsonCompareInput = ({ onLeftChange, onRightChange, diffs = [] }: JsonCompareInputProps) => {
-  const [leftValue, setLeftValue] = useState("");
-  const [rightValue, setRightValue] = useState("");
+const JsonCompareInput = ({
+  onLeftChange,
+  onRightChange,
+  diffs = [],
+  initialLeftValue = "",
+  initialRightValue = "",
+  storageKeyLeft,
+  storageKeyRight,
+}: JsonCompareInputProps) => {
+  const [leftValue, setLeftValue] = useState(initialLeftValue);
+  const [rightValue, setRightValue] = useState(initialRightValue);
+
+  // Synchroniser avec les props initiales si elles changent
+  useEffect(() => {
+    if (initialLeftValue !== undefined) {
+      setLeftValue(initialLeftValue);
+    }
+  }, [initialLeftValue]);
+
+  useEffect(() => {
+    if (initialRightValue !== undefined) {
+      setRightValue(initialRightValue);
+    }
+  }, [initialRightValue]);
+
+  // Sauvegarder dans localStorage quand le texte change
+  useEffect(() => {
+    if (storageKeyLeft && typeof window !== "undefined") {
+      if (leftValue) {
+        localStorage.setItem(storageKeyLeft, leftValue);
+      } else {
+        localStorage.removeItem(storageKeyLeft);
+      }
+    }
+  }, [leftValue, storageKeyLeft]);
+
+  useEffect(() => {
+    if (storageKeyRight && typeof window !== "undefined") {
+      if (rightValue) {
+        localStorage.setItem(storageKeyRight, rightValue);
+      } else {
+        localStorage.removeItem(storageKeyRight);
+      }
+    }
+  }, [rightValue, storageKeyRight]);
   const [leftError, setLeftError] = useState<string | null>(null);
   const [rightError, setRightError] = useState<string | null>(null);
+  const [leftCopied, setLeftCopied] = useState(false);
+  const [rightCopied, setRightCopied] = useState(false);
+  const [showDiffView, setShowDiffView] = useState(false);
   const leftHighlightRef = useRef<HTMLPreElement>(null);
   const rightHighlightRef = useRef<HTMLPreElement>(null);
   const leftTextareaRef = useRef<HTMLTextAreaElement>(null);
@@ -153,23 +203,86 @@ const JsonCompareInput = ({ onLeftChange, onRightChange, diffs = [] }: JsonCompa
     }
   };
 
+  const canShowDiff = !leftError && !rightError && leftValue && rightValue;
+
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="space-y-4">
+      {canShowDiff && (
+        <div className="flex items-center justify-end gap-2">
+          <span className="text-xs text-slate-400">View mode:</span>
+          <div className="flex rounded-full border border-white/10 bg-black/30 p-1 text-white">
+            <button
+              type="button"
+              onClick={() => setShowDiffView(false)}
+              className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+                !showDiffView ? "bg-emerald-400/20 text-white" : "text-slate-400 hover:text-white"
+              }`}
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowDiffView(true)}
+              className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+                showDiffView ? "bg-amber-400/20 text-amber-300" : "text-slate-400 hover:text-amber-200"
+              }`}
+            >
+              Diff
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showDiffView && canShowDiff ? (
+        <JsonDiffView leftJson={leftValue} rightJson={rightValue} diffs={diffs} />
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-2">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.2em] text-emerald-300">JSON LEFT</p>
             <p className="text-xs text-slate-400">First JSON to compare</p>
           </div>
-          <button
-            type="button"
-            onClick={() => formatJson(leftValue, setLeftValue, setLeftError)}
-            className="rounded-full border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white transition hover:border-emerald-300 hover:text-emerald-200"
-          >
-            Format
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => formatJson(leftValue, setLeftValue, setLeftError)}
+              className="rounded-full border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white transition hover:border-emerald-300 hover:text-emerald-200"
+            >
+              Format
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setLeftValue("");
+                setLeftError(null);
+                onLeftChange(null);
+              }}
+              className="rounded-full border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-400 transition hover:border-rose-300 hover:text-rose-200"
+            >
+              Clear
+            </button>
+          </div>
         </div>
         <div className="relative">
+          <button
+            type="button"
+            title="Copy JSON"
+            aria-label="Copy JSON"
+            onClick={async () => {
+              if (typeof navigator === "undefined" || !navigator.clipboard) return;
+              try {
+                await navigator.clipboard.writeText(leftValue);
+                setLeftCopied(true);
+                setTimeout(() => setLeftCopied(false), 1400);
+              } catch (err) {
+                console.error(err);
+              }
+            }}
+            className="absolute right-4 top-4 z-20 rounded-full border border-white/15 bg-black/40 px-2 py-1 text-xs text-slate-200 backdrop-blur transition hover:border-emerald-300 hover:text-white"
+          >
+            {leftCopied ? "✓" : "⧉"}
+          </button>
           {leftHighlightLines.size > 0 && (
             <pre
               ref={leftHighlightRef}
@@ -233,15 +346,46 @@ const JsonCompareInput = ({ onLeftChange, onRightChange, diffs = [] }: JsonCompa
             <p className="text-sm uppercase tracking-[0.2em] text-amber-300">JSON RIGHT</p>
             <p className="text-xs text-slate-400">Second JSON to compare</p>
           </div>
-          <button
-            type="button"
-            onClick={() => formatJson(rightValue, setRightValue, setRightError)}
-            className="rounded-full border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white transition hover:border-amber-300 hover:text-amber-200"
-          >
-            Format
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => formatJson(rightValue, setRightValue, setRightError)}
+              className="rounded-full border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white transition hover:border-amber-300 hover:text-amber-200"
+            >
+              Format
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setRightValue("");
+                setRightError(null);
+                onRightChange(null);
+              }}
+              className="rounded-full border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-400 transition hover:border-rose-300 hover:text-rose-200"
+            >
+              Clear
+            </button>
+          </div>
         </div>
         <div className="relative">
+          <button
+            type="button"
+            title="Copy JSON"
+            aria-label="Copy JSON"
+            onClick={async () => {
+              if (typeof navigator === "undefined" || !navigator.clipboard) return;
+              try {
+                await navigator.clipboard.writeText(rightValue);
+                setRightCopied(true);
+                setTimeout(() => setRightCopied(false), 1400);
+              } catch (err) {
+                console.error(err);
+              }
+            }}
+            className="absolute right-4 top-4 z-20 rounded-full border border-white/15 bg-black/40 px-2 py-1 text-xs text-slate-200 backdrop-blur transition hover:border-amber-300 hover:text-white"
+          >
+            {rightCopied ? "✓" : "⧉"}
+          </button>
           {rightHighlightLines.size > 0 && (
             <pre
               ref={rightHighlightRef}
@@ -298,6 +442,8 @@ const JsonCompareInput = ({ onLeftChange, onRightChange, diffs = [] }: JsonCompa
           <p className="text-xs text-slate-500">Valid JSON ✓</p>
         ) : null}
       </div>
+        </div>
+      )}
     </div>
   );
 };
