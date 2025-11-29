@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import type { TreeNode } from "@/lib/treeBuilder";
 
 type JsonTreeProps = {
@@ -8,10 +8,35 @@ type JsonTreeProps = {
   searchTerm?: string;
 };
 
+const collectAllPaths = (node: TreeNode): string[] => {
+  const paths: string[] = [];
+  if (node.children.length > 0) {
+    paths.push(node.path);
+    node.children.forEach((child) => {
+      paths.push(...collectAllPaths(child));
+    });
+  }
+  return paths;
+};
+
 const JsonTree = ({ tree, searchTerm = "" }: JsonTreeProps) => {
-  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+  const allPaths = useMemo(() => collectAllPaths(tree), [tree]);
+  const initialCollapsed = useMemo(() => {
+    const state: Record<string, boolean> = {};
+    allPaths.forEach((path) => {
+      state[path] = true; // All nodes collapsed by default
+    });
+    return state;
+  }, [allPaths]);
+
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>(initialCollapsed);
   const [activePath, setActivePath] = useState<string>(tree.path);
   const normalizedSearch = searchTerm.trim().toLowerCase();
+
+  // Reset collapsed state when tree changes
+  useEffect(() => {
+    setCollapsed(initialCollapsed);
+  }, [initialCollapsed]);
 
   const handleToggle = (path: string) => {
     setCollapsed((prev) => ({ ...prev, [path]: !prev[path] }));

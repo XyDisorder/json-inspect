@@ -9,6 +9,7 @@ import Tabs from "@/components/ui/Tabs";
 import TsTypesView from "@/components/inspector/TsTypesView";
 import JsonCompare from "@/components/compare/JsonCompare";
 import JsonCompareInput from "@/components/compare/JsonCompareInput";
+import Footer from "@/components/ui/Footer";
 import { buildTree, type JsonValue } from "@/lib/treeBuilder";
 import { jsonToPaths } from "@/lib/jsonToPaths";
 import { jsonToSchema } from "@/lib/jsonToSchema";
@@ -287,6 +288,7 @@ const FieldLensPage = () => {
           </section>
         )}
       </div>
+      <Footer />
     </main>
   );
 };
