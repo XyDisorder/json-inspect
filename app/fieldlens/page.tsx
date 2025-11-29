@@ -19,7 +19,7 @@ import { compareJson } from "@/lib/jsonCompare";
 import { compareJsonText } from "@/lib/jsonCompareText";
 
 const defaultJson = {
-  name: "FieldLens",
+  name: "JsonLens",
   version: "1.0.0",
   features: [
     { title: "Tree View", status: "stable" },
@@ -168,7 +168,7 @@ const FieldLensPage = () => {
           <div className="flex items-start justify-between">
             <div className="space-y-3">
               <p className="text-xs uppercase tracking-[0.4em] text-emerald-500 dark:text-emerald-300">Developer Tool</p>
-              <h1 className="text-4xl font-semibold text-gray-900 dark:text-white">FieldLens — JSON Inspector</h1>
+              <h1 className="text-4xl font-semibold text-gray-900 dark:text-white">JsonLens — JSON Inspector</h1>
               <p className="text-gray-600 dark:text-slate-400">Paste JSON - Explore - Generate Types</p>
             </div>
             <ThemeToggle />

@@ -2,8 +2,8 @@ import Link from "next/link";
 import Footer from "@/components/ui/Footer";
 
 export const metadata = {
-  title: "Cookie Policy — FieldLens",
-  description: "Cookie policy for FieldLens",
+  title: "Cookie Policy — JsonLens",
+  description: "Cookie policy for JsonLens",
 };
 
 export default function CookiePolicyPage() {
@@ -14,7 +14,7 @@ export default function CookiePolicyPage() {
           href="/fieldlens"
           className="mb-8 inline-block text-sm text-emerald-300 transition hover:text-emerald-200"
         >
-          ← Back to FieldLens
+          ← Back to JsonLens
         </Link>
 
         <header className="mb-8 space-y-2">
@@ -26,7 +26,7 @@ export default function CookiePolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">1. Introduction</h2>
             <p>
-              This Cookie Policy explains how FieldLens uses cookies and similar technologies. FieldLens is designed with privacy in mind and uses minimal tracking technologies.
+              This Cookie Policy explains how JsonLens uses cookies and similar technologies. JsonLens is designed with privacy in mind and uses minimal tracking technologies.
             </p>
           </section>
 
@@ -38,12 +38,12 @@ export default function CookiePolicyPage() {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-white">3. Cookies Used by FieldLens</h2>
+            <h2 className="text-xl font-semibold text-white">3. Cookies Used by JsonLens</h2>
             <p>
-              <strong className="text-emerald-300">FieldLens does not use cookies for tracking or analytics purposes.</strong>
+              <strong className="text-emerald-300">JsonLens does not use cookies for tracking or analytics purposes.</strong>
             </p>
             <p>
-              However, FieldLens uses browser localStorage (not cookies) to:
+              However, JsonLens uses browser localStorage (not cookies) to:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>Save your JSON inputs locally on your device</li>
@@ -62,7 +62,7 @@ export default function CookiePolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">4. Third-Party Cookies</h2>
             <p>
-              FieldLens does not use third-party cookies or tracking services. We do not integrate with:
+              JsonLens does not use third-party cookies or tracking services. We do not integrate with:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>Analytics services (Google Analytics, etc.)</li>
@@ -75,7 +75,7 @@ export default function CookiePolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">5. Hosting Platform Cookies</h2>
             <p>
-              If FieldLens is hosted on platforms like Vercel, Netlify, or similar services, these platforms may set essential cookies for:
+              If JsonLens is hosted on platforms like Vercel, Netlify, or similar services, these platforms may set essential cookies for:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>Security and authentication</li>
@@ -83,7 +83,7 @@ export default function CookiePolicyPage() {
               <li>Performance optimization</li>
             </ul>
             <p>
-              These cookies are set by the hosting platform, not by FieldLens, and are standard for web hosting services.
+              These cookies are set by the hosting platform, not by JsonLens, and are standard for web hosting services.
             </p>
           </section>
 
@@ -137,7 +137,7 @@ export default function CookiePolicyPage() {
             href="/fieldlens"
             className="text-sm text-emerald-300 transition hover:text-emerald-200"
           >
-            ← Back to FieldLens
+            ← Back to JsonLens
           </Link>
         </div>
       </div>

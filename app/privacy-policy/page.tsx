@@ -2,8 +2,8 @@ import Link from "next/link";
 import Footer from "@/components/ui/Footer";
 
 export const metadata = {
-  title: "Privacy Policy — FieldLens",
-  description: "Privacy policy for FieldLens",
+  title: "Privacy Policy — JsonLens",
+  description: "Privacy policy for JsonLens",
 };
 
 export default function PrivacyPolicyPage() {
@@ -14,7 +14,7 @@ export default function PrivacyPolicyPage() {
           href="/fieldlens"
           className="mb-8 inline-block text-sm text-emerald-300 transition hover:text-emerald-200"
         >
-          ← Back to FieldLens
+          ← Back to JsonLens
         </Link>
 
         <header className="mb-8 space-y-2">
@@ -26,14 +26,14 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">1. Introduction</h2>
             <p>
-              FieldLens is committed to protecting your privacy. This Privacy Policy explains how we handle data when you use our service.
+              JsonLens is committed to protecting your privacy. This Privacy Policy explains how we handle data when you use our service.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">2. Client-Side Processing</h2>
             <p>
-              <strong className="text-emerald-300">FieldLens operates 100% client-side.</strong> All JSON data processing occurs entirely in your web browser. No data is transmitted to our servers or any third-party servers.
+              <strong className="text-emerald-300">JsonLens operates 100% client-side.</strong> All JSON data processing occurs entirely in your web browser. No data is transmitted to our servers or any third-party servers.
             </p>
             <p>
               This means:
@@ -49,7 +49,7 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">3. Local Storage</h2>
             <p>
-              FieldLens uses browser localStorage to save your JSON inputs locally on your device. This feature:
+              JsonLens uses browser localStorage to save your JSON inputs locally on your device. This feature:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>Stores data only on your device</li>
@@ -78,7 +78,7 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">5. Third-Party Services</h2>
             <p>
-              FieldLens may be hosted on platforms (such as Vercel, Netlify, or GitHub Pages) that may collect standard web server logs (IP addresses, access times). These logs are standard for web hosting and are not used by FieldLens for any purpose.
+              JsonLens may be hosted on platforms (such as Vercel, Netlify, or GitHub Pages) that may collect standard web server logs (IP addresses, access times). These logs are standard for web hosting and are not used by JsonLens for any purpose.
             </p>
           </section>
 
@@ -118,7 +118,7 @@ export default function PrivacyPolicyPage() {
             href="/fieldlens"
             className="text-sm text-emerald-300 transition hover:text-emerald-200"
           >
-            ← Back to FieldLens
+            ← Back to JsonLens
           </Link>
         </div>
       </div>

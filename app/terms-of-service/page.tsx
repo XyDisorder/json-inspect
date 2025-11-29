@@ -2,8 +2,8 @@ import Link from "next/link";
 import Footer from "@/components/ui/Footer";
 
 export const metadata = {
-  title: "Terms of Service — FieldLens",
-  description: "Terms of service for FieldLens",
+  title: "Terms of Service — JsonLens",
+  description: "Terms of service for JsonLens",
 };
 
 export default function TermsOfServicePage() {
@@ -14,7 +14,7 @@ export default function TermsOfServicePage() {
           href="/fieldlens"
           className="mb-8 inline-block text-sm text-emerald-300 transition hover:text-emerald-200"
         >
-          ← Back to FieldLens
+          ← Back to JsonLens
         </Link>
 
         <header className="mb-8 space-y-2">
@@ -26,21 +26,21 @@ export default function TermsOfServicePage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">1. Acceptance of Terms</h2>
             <p>
-              By accessing and using FieldLens, you accept and agree to be bound by the terms and provision of this agreement.
+              By accessing and using JsonLens, you accept and agree to be bound by the terms and provision of this agreement.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">2. Description of Service</h2>
             <p>
-              FieldLens is a free, open-source developer tool that allows users to inspect, analyze, and transform JSON data entirely within their web browser.
+              JsonLens is a free, open-source developer tool that allows users to inspect, analyze, and transform JSON data entirely within their web browser.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">3. Use License</h2>
             <p>
-              FieldLens is provided as open source software. You are free to:
+              JsonLens is provided as open source software. You are free to:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>Use the service for any purpose</li>
@@ -55,7 +55,7 @@ export default function TermsOfServicePage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">4. Disclaimer</h2>
             <p>
-              FieldLens is provided &quot;as is&quot; without any warranties, expressed or implied. We do not guarantee:
+              JsonLens is provided &quot;as is&quot; without any warranties, expressed or implied. We do not guarantee:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>That the service will be uninterrupted or error-free</li>
@@ -67,7 +67,7 @@ export default function TermsOfServicePage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">5. Limitation of Liability</h2>
             <p>
-              In no event shall FieldLens, its developers, or contributors be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use FieldLens.
+              In no event shall JsonLens, its developers, or contributors be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use JsonLens.
             </p>
           </section>
 
@@ -87,7 +87,7 @@ export default function TermsOfServicePage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">7. Data and Privacy</h2>
             <p>
-              FieldLens processes all data client-side. You retain full control and responsibility for your data. We do not collect, store, or process your JSON data on our servers.
+              JsonLens processes all data client-side. You retain full control and responsibility for your data. We do not collect, store, or process your JSON data on our servers.
             </p>
           </section>
 
@@ -120,7 +120,7 @@ export default function TermsOfServicePage() {
             href="/fieldlens"
             className="text-sm text-emerald-300 transition hover:text-emerald-200"
           >
-            ← Back to FieldLens
+            ← Back to JsonLens
           </Link>
         </div>
       </div>

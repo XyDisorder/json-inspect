@@ -2,8 +2,8 @@ import Link from "next/link";
 import Footer from "@/components/ui/Footer";
 
 export const metadata = {
-  title: "Legal Notice — FieldLens",
-  description: "Legal notice and information about FieldLens",
+  title: "Legal Notice — JsonLens",
+  description: "Legal notice and information about JsonLens",
 };
 
 export default function LegalNoticePage() {
@@ -14,7 +14,7 @@ export default function LegalNoticePage() {
           href="/fieldlens"
           className="mb-8 inline-block text-sm text-emerald-300 transition hover:text-emerald-200"
         >
-          ← Back to FieldLens
+          ← Back to JsonLens
         </Link>
 
         <header className="mb-8 space-y-2">
@@ -26,7 +26,7 @@ export default function LegalNoticePage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">1. Publisher Information</h2>
             <p>
-              <strong className="text-slate-200">Service Name:</strong> FieldLens
+              <strong className="text-slate-200">Service Name:</strong> JsonLens
             </p>
             <p>
               <strong className="text-slate-200">Type:</strong> Open Source Developer Tool
@@ -46,7 +46,7 @@ export default function LegalNoticePage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">3. Intellectual Property</h2>
             <p>
-              FieldLens is an open source project. The source code is available on GitHub under the applicable open source license.
+              JsonLens is an open source project. The source code is available on GitHub under the applicable open source license.
             </p>
             <p>
               Unless otherwise specified, the code and content are provided as-is for use and modification according to the project&apos;s license.
@@ -56,7 +56,7 @@ export default function LegalNoticePage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">4. Data Processing</h2>
             <p>
-              <strong className="text-emerald-300">Important:</strong> FieldLens operates entirely client-side. All JSON data processing occurs in your browser. No data is transmitted to any server.
+              <strong className="text-emerald-300">Important:</strong> JsonLens operates entirely client-side. All JSON data processing occurs in your browser. No data is transmitted to any server.
             </p>
             <p>
               The application may use browser localStorage to persist your JSON inputs locally on your device for convenience. This data remains on your device and is never shared.
@@ -66,7 +66,7 @@ export default function LegalNoticePage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">5. Limitation of Liability</h2>
             <p>
-              FieldLens is provided &quot;as is&quot; without warranty of any kind. The developers and contributors are not liable for any damages resulting from the use of this tool.
+              JsonLens is provided &quot;as is&quot; without warranty of any kind. The developers and contributors are not liable for any damages resulting from the use of this tool.
             </p>
             <p>
               Users are responsible for ensuring the security and privacy of their own data when using this tool.
@@ -95,7 +95,7 @@ export default function LegalNoticePage() {
             href="/fieldlens"
             className="text-sm text-emerald-300 transition hover:text-emerald-200"
           >
-            ← Back to FieldLens
+            ← Back to JsonLens
           </Link>
         </div>
       </div>

@@ -2,8 +2,8 @@ import Link from "next/link";
 import Footer from "@/components/ui/Footer";
 
 export const metadata = {
-  title: "Contact — FieldLens",
-  description: "Get in touch with the FieldLens team",
+  title: "Contact — JsonLens",
+  description: "Get in touch with the JsonLens team",
 };
 
 export default function ContactPage() {
@@ -18,12 +18,12 @@ export default function ContactPage() {
           href="/fieldlens"
           className="mb-8 inline-block text-sm text-emerald-300 transition hover:text-emerald-200"
         >
-          ← Back to FieldLens
+          ← Back to JsonLens
         </Link>
 
         <header className="mb-8 space-y-2">
           <h1 className="text-3xl font-semibold text-white">Contact</h1>
-          <p className="text-sm text-slate-400">Get in touch with the FieldLens team</p>
+          <p className="text-sm text-slate-400">Get in touch with the JsonLens team</p>
         </header>
 
         <div className="space-y-8">
@@ -130,7 +130,7 @@ export default function ContactPage() {
           <section className="rounded-2xl border border-white/10 bg-black/20 p-6">
             <h2 className="mb-4 text-xl font-semibold text-white">Contribute</h2>
             <p className="mb-4 text-sm text-slate-300">
-              FieldLens is open source! Check out the repository to contribute code, suggest improvements, or fork the project.
+              JsonLens is open source! Check out the repository to contribute code, suggest improvements, or fork the project.
             </p>
             <a
               href={githubUrl}
@@ -155,7 +155,7 @@ export default function ContactPage() {
             href="/fieldlens"
             className="text-sm text-emerald-300 transition hover:text-emerald-200"
           >
-            ← Back to FieldLens
+            ← Back to JsonLens
           </Link>
         </div>
       </div>

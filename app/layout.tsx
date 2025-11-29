@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/ui/ThemeProvider";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "FieldLens — JSON Inspector",
+  title: "JsonLens — JSON Inspector",
   description: "Paste JSON, explore structure, generate types and schema.",
 };
 
