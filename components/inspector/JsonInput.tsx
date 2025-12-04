@@ -77,8 +77,8 @@ const JsonInput = ({ initialValue, onJsonChange, onTextChange }: JsonInputProps)
   };
 
   const renderTextarea = (
-    textareaRefToUse: React.RefObject<HTMLTextAreaElement>,
-    highlightRefToUse: React.RefObject<HTMLPreElement>,
+    textareaRefToUse: React.RefObject<HTMLTextAreaElement | null>,
+    highlightRefToUse: React.RefObject<HTMLPreElement | null>,
     searchToUse: ReturnType<typeof useJsonSearch>,
     isFullscreenMode = false,
   ) => (
