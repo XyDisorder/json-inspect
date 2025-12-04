@@ -1,9 +1,21 @@
 import Link from "next/link";
 import Footer from "@/components/ui/Footer";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Privacy Policy — JsonLens",
-  description: "Privacy policy for JsonLens",
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description:
+    "JsonInspect privacy policy. Learn how we protect your data. JsonInspect operates 100% client-side - your JSON data never leaves your browser.",
+  keywords: ["JsonInspect privacy", "data protection", "client-side processing", "no data collection"],
+  openGraph: {
+    title: "Privacy Policy — JsonInspect",
+    description: "JsonInspect operates 100% client-side. Your JSON data never leaves your browser. No tracking, no data collection.",
+    type: "website",
+    url: "/privacy-policy",
+  },
+  alternates: {
+    canonical: "/privacy-policy",
+  },
 };
 
 export default function PrivacyPolicyPage() {
@@ -14,7 +26,7 @@ export default function PrivacyPolicyPage() {
           href="/fieldlens"
           className="mb-8 inline-block text-sm text-emerald-300 transition hover:text-emerald-200"
         >
-          ← Back to JsonLens
+          ← Back to JsonInspect
         </Link>
 
         <header className="mb-8 space-y-2">
@@ -26,14 +38,14 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">1. Introduction</h2>
             <p>
-              JsonLens is committed to protecting your privacy. This Privacy Policy explains how we handle data when you use our service.
+              JsonInspect is committed to protecting your privacy. This Privacy Policy explains how we handle data when you use our service.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">2. Client-Side Processing</h2>
             <p>
-              <strong className="text-emerald-300">JsonLens operates 100% client-side.</strong> All JSON data processing occurs entirely in your web browser. No data is transmitted to our servers or any third-party servers.
+              <strong className="text-emerald-300">JsonInspect operates 100% client-side.</strong> All JSON data processing occurs entirely in your web browser. No data is transmitted to our servers or any third-party servers.
             </p>
             <p>
               This means:
@@ -49,7 +61,7 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">3. Local Storage</h2>
             <p>
-              JsonLens uses browser localStorage to save your JSON inputs locally on your device. This feature:
+              JsonInspect uses browser localStorage to save your JSON inputs locally on your device. This feature:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>Stores data only on your device</li>
@@ -78,7 +90,7 @@ export default function PrivacyPolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">5. Third-Party Services</h2>
             <p>
-              JsonLens may be hosted on platforms (such as Vercel, Netlify, or GitHub Pages) that may collect standard web server logs (IP addresses, access times). These logs are standard for web hosting and are not used by JsonLens for any purpose.
+              JsonInspect may be hosted on platforms (such as Vercel, Netlify, or GitHub Pages) that may collect standard web server logs (IP addresses, access times). These logs are standard for web hosting and are not used by JsonInspect for any purpose.
             </p>
           </section>
 
@@ -118,7 +130,7 @@ export default function PrivacyPolicyPage() {
             href="/fieldlens"
             className="text-sm text-emerald-300 transition hover:text-emerald-200"
           >
-            ← Back to JsonLens
+            ← Back to JsonInspect
           </Link>
         </div>
       </div>

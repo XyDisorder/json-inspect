@@ -1,9 +1,21 @@
 import Link from "next/link";
 import Footer from "@/components/ui/Footer";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Cookie Policy — JsonLens",
-  description: "Cookie policy for JsonLens",
+export const metadata: Metadata = {
+  title: "Cookie Policy",
+  description:
+    "Cookie policy for JsonInspect. JsonInspect does not use cookies for tracking. We only use browser localStorage for local data storage.",
+  keywords: ["JsonInspect cookies", "cookie policy", "no tracking cookies", "localStorage"],
+  openGraph: {
+    title: "Cookie Policy — JsonInspect",
+    description: "JsonInspect does not use cookies for tracking. We only use browser localStorage for local data storage.",
+    type: "website",
+    url: "/cookie-policy",
+  },
+  alternates: {
+    canonical: "/cookie-policy",
+  },
 };
 
 export default function CookiePolicyPage() {
@@ -14,7 +26,7 @@ export default function CookiePolicyPage() {
           href="/fieldlens"
           className="mb-8 inline-block text-sm text-emerald-300 transition hover:text-emerald-200"
         >
-          ← Back to JsonLens
+          ← Back to JsonInspect
         </Link>
 
         <header className="mb-8 space-y-2">
@@ -26,7 +38,7 @@ export default function CookiePolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">1. Introduction</h2>
             <p>
-              This Cookie Policy explains how JsonLens uses cookies and similar technologies. JsonLens is designed with privacy in mind and uses minimal tracking technologies.
+              This Cookie Policy explains how JsonInspect uses cookies and similar technologies. JsonInspect is designed with privacy in mind and uses minimal tracking technologies.
             </p>
           </section>
 
@@ -38,12 +50,12 @@ export default function CookiePolicyPage() {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-white">3. Cookies Used by JsonLens</h2>
+            <h2 className="text-xl font-semibold text-white">3. Cookies Used by JsonInspect</h2>
             <p>
-              <strong className="text-emerald-300">JsonLens does not use cookies for tracking or analytics purposes.</strong>
+              <strong className="text-emerald-300">JsonInspect does not use cookies for tracking or analytics purposes.</strong>
             </p>
             <p>
-              However, JsonLens uses browser localStorage (not cookies) to:
+              However, JsonInspect uses browser localStorage (not cookies) to:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>Save your JSON inputs locally on your device</li>
@@ -62,7 +74,7 @@ export default function CookiePolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">4. Third-Party Cookies</h2>
             <p>
-              JsonLens does not use third-party cookies or tracking services. We do not integrate with:
+              JsonInspect does not use third-party cookies or tracking services. We do not integrate with:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>Analytics services (Google Analytics, etc.)</li>
@@ -75,7 +87,7 @@ export default function CookiePolicyPage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">5. Hosting Platform Cookies</h2>
             <p>
-              If JsonLens is hosted on platforms like Vercel, Netlify, or similar services, these platforms may set essential cookies for:
+              If JsonInspect is hosted on platforms like Vercel, Netlify, or similar services, these platforms may set essential cookies for:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>Security and authentication</li>
@@ -83,7 +95,7 @@ export default function CookiePolicyPage() {
               <li>Performance optimization</li>
             </ul>
             <p>
-              These cookies are set by the hosting platform, not by JsonLens, and are standard for web hosting services.
+              These cookies are set by the hosting platform, not by JsonInspect, and are standard for web hosting services.
             </p>
           </section>
 
@@ -137,7 +149,7 @@ export default function CookiePolicyPage() {
             href="/fieldlens"
             className="text-sm text-emerald-300 transition hover:text-emerald-200"
           >
-            ← Back to JsonLens
+            ← Back to JsonInspect
           </Link>
         </div>
       </div>

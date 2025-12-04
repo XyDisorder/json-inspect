@@ -46,22 +46,26 @@ const JsonCompareTextarea = ({
 }: JsonCompareTextareaProps) => {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [parsedJson, setParsedJson] = useState<JsonValue | null>(null);
   const highlightRef = useRef<HTMLPreElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const { highlightLines, segments } = useJsonCompareHighlight(value, diffs, isLeft);
+  const { highlightLines, segments } = useJsonCompareHighlight(value, diffs, isLeft, parsedJson);
 
   // Check if JSON is valid on mount and when value changes
   useEffect(() => {
     if (!value) {
       setError(null);
+      setParsedJson(null);
       return;
     }
     try {
-      JSON.parse(value) as JsonValue;
+      const parsed = JSON.parse(value) as JsonValue;
       setError(null);
+      setParsedJson(parsed);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Invalid JSON");
+      setParsedJson(null);
     }
   }, [value]);
 

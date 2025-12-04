@@ -1,9 +1,21 @@
 import Link from "next/link";
 import Footer from "@/components/ui/Footer";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Terms of Service — JsonLens",
-  description: "Terms of service for JsonLens",
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description:
+    "Terms of service for JsonInspect. Learn about the usage terms, open source license, and user responsibilities for this free JSON tool.",
+  keywords: ["JsonInspect terms", "terms of service", "usage terms", "open source license"],
+  openGraph: {
+    title: "Terms of Service — JsonInspect",
+    description: "Terms of service for JsonInspect. Open source software provided as-is for free use.",
+    type: "website",
+    url: "/terms-of-service",
+  },
+  alternates: {
+    canonical: "/terms-of-service",
+  },
 };
 
 export default function TermsOfServicePage() {
@@ -14,7 +26,7 @@ export default function TermsOfServicePage() {
           href="/fieldlens"
           className="mb-8 inline-block text-sm text-emerald-300 transition hover:text-emerald-200"
         >
-          ← Back to JsonLens
+          ← Back to JsonInspect
         </Link>
 
         <header className="mb-8 space-y-2">
@@ -26,21 +38,21 @@ export default function TermsOfServicePage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">1. Acceptance of Terms</h2>
             <p>
-              By accessing and using JsonLens, you accept and agree to be bound by the terms and provision of this agreement.
+              By accessing and using JsonInspect, you accept and agree to be bound by the terms and provision of this agreement.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">2. Description of Service</h2>
             <p>
-              JsonLens is a free, open-source developer tool that allows users to inspect, analyze, and transform JSON data entirely within their web browser.
+              JsonInspect is a free, open-source developer tool that allows users to inspect, analyze, and transform JSON data entirely within their web browser.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">3. Use License</h2>
             <p>
-              JsonLens is provided as open source software. You are free to:
+              JsonInspect is provided as open source software. You are free to:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>Use the service for any purpose</li>
@@ -55,7 +67,7 @@ export default function TermsOfServicePage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">4. Disclaimer</h2>
             <p>
-              JsonLens is provided &quot;as is&quot; without any warranties, expressed or implied. We do not guarantee:
+              JsonInspect is provided &quot;as is&quot; without any warranties, expressed or implied. We do not guarantee:
             </p>
             <ul className="ml-6 list-disc space-y-2">
               <li>That the service will be uninterrupted or error-free</li>
@@ -67,7 +79,7 @@ export default function TermsOfServicePage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">5. Limitation of Liability</h2>
             <p>
-              In no event shall JsonLens, its developers, or contributors be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use JsonLens.
+              In no event shall JsonInspect, its developers, or contributors be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use JsonInspect.
             </p>
           </section>
 
@@ -87,7 +99,7 @@ export default function TermsOfServicePage() {
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-white">7. Data and Privacy</h2>
             <p>
-              JsonLens processes all data client-side. You retain full control and responsibility for your data. We do not collect, store, or process your JSON data on our servers.
+              JsonInspect processes all data client-side. You retain full control and responsibility for your data. We do not collect, store, or process your JSON data on our servers.
             </p>
           </section>
 
@@ -120,7 +132,7 @@ export default function TermsOfServicePage() {
             href="/fieldlens"
             className="text-sm text-emerald-300 transition hover:text-emerald-200"
           >
-            ← Back to JsonLens
+            ← Back to JsonInspect
           </Link>
         </div>
       </div>

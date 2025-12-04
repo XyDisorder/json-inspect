@@ -1,9 +1,22 @@
 import Link from "next/link";
 import Footer from "@/components/ui/Footer";
 
-export const metadata = {
-  title: "Contact — JsonLens",
-  description: "Get in touch with the JsonLens team",
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  description:
+    "Get in touch with the JsonInspect team. Report bugs, suggest features, or contribute to the open-source project on GitHub.",
+  keywords: ["JsonInspect contact", "JSON tool support", "report bug", "feature request"],
+  openGraph: {
+    title: "Contact — JsonInspect",
+    description: "Get in touch with the JsonInspect team. Report bugs, suggest features, or contribute to the project.",
+    type: "website",
+    url: "/contact",
+  },
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 export default function ContactPage() {
@@ -18,12 +31,12 @@ export default function ContactPage() {
           href="/fieldlens"
           className="mb-8 inline-block text-sm text-emerald-300 transition hover:text-emerald-200"
         >
-          ← Back to JsonLens
+          ← Back to JsonInspect
         </Link>
 
         <header className="mb-8 space-y-2">
           <h1 className="text-3xl font-semibold text-white">Contact</h1>
-          <p className="text-sm text-slate-400">Get in touch with the JsonLens team</p>
+          <p className="text-sm text-slate-400">Get in touch with the JsonInspect team</p>
         </header>
 
         <div className="space-y-8">
@@ -130,7 +143,7 @@ export default function ContactPage() {
           <section className="rounded-2xl border border-white/10 bg-black/20 p-6">
             <h2 className="mb-4 text-xl font-semibold text-white">Contribute</h2>
             <p className="mb-4 text-sm text-slate-300">
-              JsonLens is open source! Check out the repository to contribute code, suggest improvements, or fork the project.
+              JsonInspect is open source! Check out the repository to contribute code, suggest improvements, or fork the project.
             </p>
             <a
               href={githubUrl}
@@ -155,7 +168,7 @@ export default function ContactPage() {
             href="/fieldlens"
             className="text-sm text-emerald-300 transition hover:text-emerald-200"
           >
-            ← Back to JsonLens
+            ← Back to JsonInspect
           </Link>
         </div>
       </div>

@@ -119,7 +119,25 @@ const JsonCompareInput = ({
       )}
 
       {showDiffView && canShowDiff ? (
-        <JsonDiffView leftJson={leftValue} rightJson={rightValue} diffs={diffs} />
+        <JsonDiffView
+          leftJson={leftValue}
+          rightJson={rightValue}
+          diffs={diffs}
+          leftJsonValue={leftError ? null : (() => {
+            try {
+              return JSON.parse(leftValue) as JsonValue;
+            } catch {
+              return null;
+            }
+          })()}
+          rightJsonValue={rightError ? null : (() => {
+            try {
+              return JSON.parse(rightValue) as JsonValue;
+            } catch {
+              return null;
+            }
+          })()}
+        />
       ) : (
         <div className="grid gap-6 lg:grid-cols-2">
           <JsonCompareTextarea

@@ -1,6 +1,6 @@
-# 🧩 JSONLens — Explore, Inspect & Transform JSON Instantly
+# 🧩 JsonInspect — Explore, Inspect & Transform JSON Instantly
 
-**JSONLens** is a lightweight developer tool designed to help you:
+**JsonInspect** is a lightweight developer tool designed to help you:
 - 🔍 **Inspect** JSON structures visually  
 - 🌳 **Navigate** nested objects/arrays with a collapsible tree view  
 - 🛣️ **List all paths** in dot-notation (`user.address.city`)  

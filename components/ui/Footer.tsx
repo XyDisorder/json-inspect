@@ -12,11 +12,11 @@ const Footer = () => {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* About */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-500 dark:text-emerald-300">JsonLens</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-500 dark:text-emerald-300">JsonInspect</h3>
             <p className="text-xs text-gray-600 dark:text-slate-400">
               Developer tool to inspect, analyze and transform your JSON data instantly.
             </p>
-            <p className="text-xs text-gray-500 dark:text-slate-500">© {currentYear} JsonLens. All rights reserved.</p>
+            <p className="text-xs text-gray-500 dark:text-slate-500">© {currentYear} JsonInspect. All rights reserved.</p>
           </div>
 
           {/* GitHub Section - Prominent */}
@@ -140,7 +140,7 @@ const Footer = () => {
         <div className="mt-8 border-t border-white/5 pt-8">
           <div className="flex flex-col items-center justify-between gap-4 text-xs text-slate-500 sm:flex-row">
             <p>
-              JsonLens is a free and open source tool. Made with <span className="text-rose-500 dark:text-rose-400">❤️</span> No personal data is collected.
+              JsonInspect is a free and open source tool. Made with <span className="text-rose-500 dark:text-rose-400">❤️</span> No personal data is collected.
             </p>
             <div className="flex gap-4">
               <a

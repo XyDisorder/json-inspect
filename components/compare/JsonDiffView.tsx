@@ -4,19 +4,23 @@ import { useMemo, useRef } from "react";
 import { computeLineDiffs, type LineDiff } from "@/lib/jsonDiffLines";
 import type { JsonDiff } from "@/lib/jsonCompare";
 
+import type { JsonValue } from "@/lib/treeBuilder";
+
 type JsonDiffViewProps = {
   leftJson: string;
   rightJson: string;
   diffs: JsonDiff[];
+  leftJsonValue?: JsonValue | null;
+  rightJsonValue?: JsonValue | null;
 };
 
-const JsonDiffView = ({ leftJson, rightJson, diffs }: JsonDiffViewProps) => {
+const JsonDiffView = ({ leftJson, rightJson, diffs, leftJsonValue = null, rightJsonValue = null }: JsonDiffViewProps) => {
   const leftScrollRef = useRef<HTMLDivElement>(null);
   const rightScrollRef = useRef<HTMLDivElement>(null);
 
   const lineDiffs = useMemo(
-    () => computeLineDiffs(leftJson || "", rightJson || "", diffs),
-    [leftJson, rightJson, diffs],
+    () => computeLineDiffs(leftJson || "", rightJson || "", diffs, leftJsonValue, rightJsonValue),
+    [leftJson, rightJson, diffs, leftJsonValue, rightJsonValue],
   );
 
   const getLineBgColor = (type: LineDiff["type"], isLeft: boolean) => {

@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 import type { JsonDiff } from "@/lib/jsonCompare";
+import type { JsonValue } from "@/lib/treeBuilder";
+import { findLinesForPath } from "@/lib/jsonPathToLine";
 
 type LineSegment = {
   text: string;
@@ -8,56 +10,31 @@ type LineSegment = {
   isLastLine: boolean;
 };
 
-const getLinesToHighlight = (text: string, paths: string[]): Set<number> => {
+const getLinesToHighlight = (text: string, paths: string[], jsonValue: JsonValue | null): Set<number> => {
   const lines = new Set<number>();
-  if (!text) return lines;
+  if (!text || !jsonValue) return lines;
 
-  const textLines = text.split("\n");
   paths.forEach((path) => {
-    // For array indices, we need to match the actual line content, not just the key
-    // So we keep numeric indices for array matching
-    const pathParts = path.split(".").filter((k) => k !== "root");
-    if (pathParts.length === 0) return;
-    
-    // If the last part is a numeric index, we need to match array elements differently
-    const lastPart = pathParts[pathParts.length - 1];
-    const isArrayIndex = /^\d+$/.test(lastPart);
-    
-    // For array indices, we can't match by key name, so we skip them
-    // They will be matched by their position in the array
-    if (isArrayIndex && pathParts.length === 1) {
-      // Root level array - can't match by key
-      return;
-    }
-    
-    // Filter out numeric indices for key matching, but keep them for path context
-    const keysOnly = pathParts.filter((k) => !/^\d+$/.test(k));
-    if (keysOnly.length === 0) return;
-    
-    // Use the last key (most specific) for matching
-    const lastKey = keysOnly[keysOnly.length - 1];
-    const escapedKey = lastKey.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    // Match the key as a JSON property (must be followed by colon)
-    const regex = new RegExp(`"${escapedKey}"\\s*:`, "i");
-    
-    // Match all occurrences of this key in the text
-    textLines.forEach((line, index) => {
-      if (regex.test(line)) {
-        lines.add(index);
-      }
+    const lineNumbers = findLinesForPath(text, path, jsonValue);
+    lineNumbers.forEach((lineNum) => {
+      // Convert to 0-based index
+      lines.add(lineNum);
     });
   });
 
   return lines;
 };
 
-const getLineDiffType = (lineIndex: number, text: string, diffs: JsonDiff[], isLeft: boolean): JsonDiff["type"] | null => {
-  const lines = text.split("\n");
-  if (lineIndex >= lines.length) return null;
-
-  const line = lines[lineIndex];
+const getLineDiffType = (
+  lineIndex: number,
+  text: string,
+  diffs: JsonDiff[],
+  isLeft: boolean,
+  jsonValue: JsonValue | null,
+): JsonDiff["type"] | null => {
+  if (!jsonValue) return null;
   
-  // Find the most specific matching diff for this line
+  // Find which diff(s) correspond to this line
   let bestMatch: JsonDiff | null = null;
   let bestMatchDepth = -1;
   
@@ -71,28 +48,21 @@ const getLineDiffType = (lineIndex: number, text: string, diffs: JsonDiff[], isL
   });
   
   for (const diff of relevantDiffs) {
-    const pathParts = diff.path.split(".").filter((k) => k !== "root" && !/^\d+$/.test(k));
-    if (pathParts.length === 0) continue;
-    
-    // Use the last key (most specific) for matching
-    const lastKey = pathParts[pathParts.length - 1];
-    const escapedKey = lastKey.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    // Match the key as a JSON property (must be followed by colon)
-    const regex = new RegExp(`"${escapedKey}"\\s*:`, "i");
-    
-    if (regex.test(line)) {
+    const lineNumbers = findLinesForPath(text, diff.path, jsonValue);
+    if (lineNumbers.includes(lineIndex)) {
+      // This diff corresponds to this line
+      const pathDepth = diff.path.split(".").length;
       // Prefer more specific matches (deeper paths)
-      // If same depth, prefer modified over added/removed (more specific change)
-      // But always accept if we don't have a match yet
+      // If same depth, prefer modified over added/removed
       const shouldUpdate = bestMatch === null || 
-        pathParts.length > bestMatchDepth || 
-        (pathParts.length === bestMatchDepth && 
+        pathDepth > bestMatchDepth || 
+        (pathDepth === bestMatchDepth && 
          diff.type === "modified" && 
          bestMatch && bestMatch.type !== "modified");
       
       if (shouldUpdate) {
         bestMatch = diff;
-        bestMatchDepth = pathParts.length;
+        bestMatchDepth = pathDepth;
       }
     }
   }
@@ -100,12 +70,18 @@ const getLineDiffType = (lineIndex: number, text: string, diffs: JsonDiff[], isL
   return bestMatch ? bestMatch.type : null;
 };
 
-const createLineSegments = (text: string, highlightLines: Set<number>, diffs: JsonDiff[], isLeft: boolean): LineSegment[] => {
+const createLineSegments = (
+  text: string,
+  highlightLines: Set<number>,
+  diffs: JsonDiff[],
+  isLeft: boolean,
+  jsonValue: JsonValue | null,
+): LineSegment[] => {
   if (!text) return [];
   const lines = text.split("\n");
   return lines.map((line, index) => {
     const shouldHighlight = highlightLines.has(index);
-    const diffType = shouldHighlight ? getLineDiffType(index, text, diffs, isLeft) : null;
+    const diffType = shouldHighlight ? getLineDiffType(index, text, diffs, isLeft, jsonValue) : null;
     return {
       text: line,
       highlight: shouldHighlight,
@@ -115,17 +91,25 @@ const createLineSegments = (text: string, highlightLines: Set<number>, diffs: Js
   });
 };
 
-export const useJsonCompareHighlight = (text: string, diffs: JsonDiff[], isLeft: boolean) => {
+export const useJsonCompareHighlight = (
+  text: string,
+  diffs: JsonDiff[],
+  isLeft: boolean,
+  jsonValue: JsonValue | null,
+) => {
   const highlightLines = useMemo(() => {
-    if (!text || !diffs.length) return new Set<number>();
+    if (!text || !diffs.length || !jsonValue) return new Set<number>();
     // Only highlight lines with actual changes (not unchanged)
     const paths = diffs
       .filter((d) => (isLeft ? d.type === "removed" || d.type === "modified" : d.type === "added" || d.type === "modified"))
       .map((d) => d.path);
-    return getLinesToHighlight(text, paths);
-  }, [text, diffs, isLeft]);
+    return getLinesToHighlight(text, paths, jsonValue);
+  }, [text, diffs, isLeft, jsonValue]);
 
-  const segments = useMemo(() => createLineSegments(text, highlightLines, diffs, isLeft), [text, highlightLines, diffs, isLeft]);
+  const segments = useMemo(
+    () => createLineSegments(text, highlightLines, diffs, isLeft, jsonValue),
+    [text, highlightLines, diffs, isLeft, jsonValue],
+  );
 
   return { highlightLines, segments };
 };
