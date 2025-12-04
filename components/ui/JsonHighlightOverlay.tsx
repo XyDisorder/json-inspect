@@ -6,16 +6,15 @@ type JsonHighlightOverlayProps = {
   segments: HighlightSegment[];
   highlightRef: React.RefObject<HTMLPreElement | null>;
   matchRefs: React.MutableRefObject<Array<HTMLElement | null>>;
-  onScroll: (event: React.UIEvent<HTMLPreElement>) => void;
+  isFullscreen?: boolean;
 };
 
-const JsonHighlightOverlay = ({ segments, highlightRef, matchRefs, onScroll }: JsonHighlightOverlayProps) => {
+const JsonHighlightOverlay = ({ segments, highlightRef, matchRefs, isFullscreen = false }: JsonHighlightOverlayProps) => {
   return (
     <pre
       ref={highlightRef}
       aria-hidden
-      onScroll={onScroll}
-      className="pointer-events-none absolute inset-0 z-0 max-h-[520px] overflow-auto rounded-2xl bg-white dark:bg-slate-900/80 p-4 text-sm leading-6 text-transparent shadow-inner whitespace-pre-wrap break-words"
+      className={`pointer-events-none absolute inset-0 z-0 ${isFullscreen ? "" : "max-h-[520px]"} overflow-hidden ${isFullscreen ? "rounded-lg" : "rounded-2xl"} bg-white dark:bg-slate-900/80 p-4 text-sm leading-6 text-transparent ${isFullscreen ? "" : "shadow-inner"} whitespace-pre-wrap break-words`}
       style={{
         fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
       }}

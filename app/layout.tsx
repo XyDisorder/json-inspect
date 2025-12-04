@@ -77,18 +77,23 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    // Add your verification codes here when available
-    // google: "your-google-verification-code",
-    // yandex: "your-yandex-verification-code",
-    // bing: "your-bing-verification-code",
+    ...(process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION && {
+      google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
+    }),
+    ...(process.env.NEXT_PUBLIC_BING_VERIFICATION && {
+      bing: process.env.NEXT_PUBLIC_BING_VERIFICATION,
+    }),
+    ...(process.env.NEXT_PUBLIC_YANDEX_VERIFICATION && {
+      yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
+    }),
   },
   alternates: {
     canonical: siteUrl,
   },
   icons: {
-    icon: "/icon.png",
-    apple: "/apple-icon.png",
-    shortcut: "/icon.png",
+    icon: "/favicon.ico",
+    apple: "/apple-icon",
+    shortcut: "/favicon.ico",
   },
   manifest: "/manifest.json",
   appleWebApp: {

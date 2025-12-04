@@ -175,14 +175,15 @@ const FieldLensPage = () => {
           </div>
         </header>
 
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-2 border-b border-gray-200 dark:border-white/10 pb-2">
-            <span className="text-xs uppercase tracking-[0.2em] text-emerald-500 dark:text-emerald-300">Mode</span>
+        <div className="flex flex-wrap items-center gap-4 border-b border-gray-200 dark:border-white/10 pb-3">
+          <div className="flex items-center gap-3">
+            <span className="text-xs uppercase tracking-[0.2em] text-emerald-500 dark:text-emerald-300 font-semibold">View Mode</span>
             <div className="flex rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-black/30 p-1 text-gray-800 dark:text-white shadow-sm dark:shadow-none">
               <button
                 type="button"
                 onClick={() => setCompareMode(false)}
-                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
+                title="Inspect and explore JSON structure"
+                className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
                   !compareMode ? "bg-emerald-500 text-white dark:bg-emerald-400/20 dark:text-white" : "text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-white"
                 }`}
               >
@@ -191,7 +192,8 @@ const FieldLensPage = () => {
               <button
                 type="button"
                 onClick={() => setCompareMode(true)}
-                  className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
+                title="Compare two JSON files"
+                className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
                   compareMode ? "bg-amber-500 text-white dark:bg-amber-400/20 dark:text-amber-300" : "text-gray-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-200"
                 }`}
               >
@@ -201,35 +203,38 @@ const FieldLensPage = () => {
           </div>
 
           {!compareMode && (
-            <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600 dark:text-slate-400">
-              <span className="uppercase tracking-[0.2em] text-emerald-500 dark:text-emerald-300">Panel layout</span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs uppercase tracking-[0.2em] text-emerald-500 dark:text-emerald-300 font-semibold">Layout</span>
               <div className="flex rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-black/30 p-1 text-gray-800 dark:text-white shadow-sm dark:shadow-none">
                 <button
                   type="button"
                   onClick={() => setPanelMode("input")}
-                  className={`rounded-full px-3 py-1 transition ${
-                    panelMode === "input" ? "bg-emerald-500 text-white dark:bg-emerald-400/20 dark:text-white" : "text-gray-500 dark:text-slate-400"
+                  title="Show only input panel"
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+                    panelMode === "input" ? "bg-emerald-500 text-white dark:bg-emerald-400/20 dark:text-white" : "text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-white"
                   }`}
                 >
-                  Focus Input
+                  Input Only
                 </button>
                 <button
                   type="button"
                   onClick={() => setPanelMode("split")}
-                  className={`rounded-full px-3 py-1 transition ${
-                    panelMode === "split" ? "bg-emerald-500 text-white dark:bg-emerald-400/20 dark:text-white" : "text-gray-500 dark:text-slate-400"
+                  title="Show both input and output panels"
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+                    panelMode === "split" ? "bg-emerald-500 text-white dark:bg-emerald-400/20 dark:text-white" : "text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-white"
                   }`}
                 >
-                  Split
+                  Split View
                 </button>
                 <button
                   type="button"
                   onClick={() => setPanelMode("output")}
-                  className={`rounded-full px-3 py-1 transition ${
-                    panelMode === "output" ? "bg-emerald-500 text-white dark:bg-emerald-400/20 dark:text-white" : "text-gray-500 dark:text-slate-400"
+                  title="Show only output panel"
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition ${
+                    panelMode === "output" ? "bg-emerald-500 text-white dark:bg-emerald-400/20 dark:text-white" : "text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-white"
                   }`}
                 >
-                  Focus Output
+                  Output Only
                 </button>
               </div>
             </div>

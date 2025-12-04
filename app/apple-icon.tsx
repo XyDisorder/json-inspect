@@ -24,7 +24,7 @@ export default function AppleIcon() {
           fontFamily: "system-ui",
         }}
       >
-        JL
+        JI
       </div>
     ),
     {
@@ -32,4 +32,5 @@ export default function AppleIcon() {
     }
   );
 }
+
 
