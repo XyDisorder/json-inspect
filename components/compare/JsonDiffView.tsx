@@ -12,9 +12,10 @@ type JsonDiffViewProps = {
   diffs: JsonDiff[];
   leftJsonValue?: JsonValue | null;
   rightJsonValue?: JsonValue | null;
+  isFullscreen?: boolean;
 };
 
-const JsonDiffView = ({ leftJson, rightJson, diffs, leftJsonValue = null, rightJsonValue = null }: JsonDiffViewProps) => {
+const JsonDiffView = ({ leftJson, rightJson, diffs, leftJsonValue = null, rightJsonValue = null, isFullscreen = false }: JsonDiffViewProps) => {
   const leftScrollRef = useRef<HTMLDivElement>(null);
   const rightScrollRef = useRef<HTMLDivElement>(null);
 
@@ -75,7 +76,7 @@ const JsonDiffView = ({ leftJson, rightJson, diffs, leftJsonValue = null, rightJ
   };
 
   return (
-    <div className="grid grid-cols-2 gap-0 overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900/80 shadow-sm dark:shadow-none">
+    <div className={`grid grid-cols-2 gap-0 overflow-hidden ${isFullscreen ? "h-full rounded-lg" : "rounded-2xl"} border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900/80 ${isFullscreen ? "" : "shadow-sm dark:shadow-none"}`}>
       {/* Left side */}
       <div className="relative border-r border-gray-200 dark:border-white/10">
         <div className="sticky top-0 z-10 border-b border-gray-200 dark:border-white/10 bg-white dark:bg-slate-800/80 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-emerald-600 dark:text-emerald-300">
@@ -84,7 +85,7 @@ const JsonDiffView = ({ leftJson, rightJson, diffs, leftJsonValue = null, rightJ
         <div
           ref={leftScrollRef}
           onScroll={handleLeftScroll}
-          className="max-h-[520px] overflow-auto font-mono text-sm leading-6 bg-white dark:bg-slate-900"
+          className={`${isFullscreen ? "h-[calc(100%-40px)]" : "max-h-[520px]"} overflow-auto font-mono text-sm leading-6 bg-white dark:bg-slate-900`}
           style={{
             fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
           }}
@@ -113,7 +114,7 @@ const JsonDiffView = ({ leftJson, rightJson, diffs, leftJsonValue = null, rightJ
         <div
           ref={rightScrollRef}
           onScroll={handleRightScroll}
-          className="max-h-[520px] overflow-auto font-mono text-sm leading-6 bg-white dark:bg-slate-900"
+          className={`${isFullscreen ? "h-[calc(100%-40px)]" : "max-h-[520px]"} overflow-auto font-mono text-sm leading-6 bg-white dark:bg-slate-900`}
           style={{
             fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
           }}

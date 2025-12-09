@@ -17,6 +17,7 @@ type JsonCompareTextareaProps = {
   onFormat: () => void;
   onClear: () => void;
   storageKey?: string;
+  isFullscreen?: boolean;
 };
 
 const getHighlightColor = (type: JsonDiff["type"]) => {
@@ -43,6 +44,7 @@ const JsonCompareTextarea = ({
   placeholder,
   onFormat,
   onClear,
+  isFullscreen = false,
 }: JsonCompareTextareaProps) => {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -76,11 +78,13 @@ const JsonCompareTextarea = ({
     if (!textarea || !overlay) return;
 
     const handleScroll = () => {
-      overlay.scrollTop = textarea.scrollTop;
-      overlay.scrollLeft = textarea.scrollLeft;
+      if (overlay) {
+        overlay.scrollTop = textarea.scrollTop;
+        overlay.scrollLeft = textarea.scrollLeft;
+      }
     };
 
-    textarea.addEventListener("scroll", handleScroll);
+    textarea.addEventListener("scroll", handleScroll, { passive: true });
     return () => textarea.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -97,11 +101,13 @@ const JsonCompareTextarea = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className={`space-y-4 ${isFullscreen ? "h-full flex flex-col" : ""}`}>
         <div className="flex items-center justify-between">
           <div>
             <p className={`text-sm uppercase tracking-[0.2em] ${labelColor}`}>{label}</p>
-            <p className="text-xs text-gray-600 dark:text-slate-400">{isLeft ? "First JSON to compare" : "Second JSON to compare"}</p>
+            {!isFullscreen && (
+              <p className="text-xs text-gray-600 dark:text-slate-400">{isLeft ? "First JSON to compare" : "Second JSON to compare"}</p>
+            )}
           </div>
           <div className="flex gap-2">
             <button
@@ -120,7 +126,7 @@ const JsonCompareTextarea = ({
             </button>
           </div>
         </div>
-      <div className="relative">
+      <div className={`relative ${isFullscreen ? "flex-1 min-h-0" : ""}`}>
         <button
           type="button"
           title="Copy JSON"
@@ -143,7 +149,13 @@ const JsonCompareTextarea = ({
           ref={textareaRef}
           value={value}
           onChange={(event) => handleChange(event.target.value)}
-          className={`relative z-10 h-[520px] w-full resize-none rounded-2xl border bg-white dark:bg-slate-900/80 p-4 text-sm leading-6 text-gray-900 dark:text-slate-100 shadow-inner outline-none transition focus:ring-2 ${
+          onScroll={() => {
+            if (highlightRef.current && textareaRef.current) {
+              highlightRef.current.scrollTop = textareaRef.current.scrollTop;
+              highlightRef.current.scrollLeft = textareaRef.current.scrollLeft;
+            }
+          }}
+          className={`relative z-10 ${isFullscreen ? "absolute inset-0 h-full" : "h-[520px]"} w-full resize-none ${isFullscreen ? "rounded-lg" : "rounded-2xl"} border bg-white dark:bg-slate-900/80 p-4 text-sm leading-6 text-gray-900 dark:text-slate-100 ${isFullscreen ? "" : "shadow-inner"} outline-none transition focus:ring-2 ${
             isLeft ? "focus:ring-emerald-400/60" : "focus:ring-amber-400/60"
           } ${error ? "border-rose-400/70" : "border-gray-200 dark:border-white/10"}`}
           style={{
@@ -158,7 +170,7 @@ const JsonCompareTextarea = ({
           <pre
             ref={highlightRef}
             aria-hidden
-            className="pointer-events-none absolute inset-0 z-20 max-h-[520px] overflow-auto rounded-2xl bg-transparent p-4 text-sm leading-6 text-transparent whitespace-pre-wrap break-words"
+            className={`pointer-events-none absolute inset-0 z-20 ${isFullscreen ? "" : "max-h-[520px]"} overflow-hidden ${isFullscreen ? "rounded-lg" : "rounded-2xl"} bg-transparent p-4 text-sm leading-6 text-transparent whitespace-pre-wrap break-words`}
             style={{
               fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
             }}
