@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import type { JsonValue } from "@/lib/treeBuilder";
 import type { JsonDiff } from "@/lib/jsonCompare";
-import JsonDiffView from "@/components/compare/JsonDiffView";
 import JsonCompareTextarea from "@/components/compare/JsonCompareTextarea";
 
 type JsonCompareInputProps = {
@@ -29,7 +28,6 @@ const JsonCompareInput = ({
   const [rightValue, setRightValue] = useState(initialRightValue);
   const [leftError, setLeftError] = useState<string | null>(null);
   const [rightError, setRightError] = useState<string | null>(null);
-  const [showDiffView, setShowDiffView] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
@@ -89,8 +87,6 @@ const JsonCompareInput = ({
     onRightChange(null);
   };
 
-  const canShowDiff = !leftError && !rightError && leftValue && rightValue;
-
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape" && isFullscreen) {
@@ -109,64 +105,18 @@ const JsonCompareInput = ({
   return (
     <>
       <div className="space-y-4">
-        <div className="flex items-center justify-between gap-2">
-          {canShowDiff && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-600 dark:text-slate-400">View mode:</span>
-              <div className="flex rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-black/30 p-1 text-gray-800 dark:text-white shadow-sm dark:shadow-none">
-                <button
-                  type="button"
-                  onClick={() => setShowDiffView(false)}
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition ${
-                    !showDiffView ? "bg-emerald-500 text-white dark:bg-emerald-400/20 dark:text-white" : "text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-white"
-                  }`}
-                >
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowDiffView(true)}
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition ${
-                    showDiffView ? "bg-amber-500 text-white dark:bg-amber-400/20 dark:text-amber-300" : "text-gray-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-200"
-                  }`}
-                >
-                  Diff
-                </button>
-              </div>
-            </div>
-          )}
+        <div className="flex items-center justify-start gap-2">
           <button
             type="button"
             title="Fullscreen (Esc to exit)"
             aria-label="Fullscreen"
             onClick={() => setIsFullscreen(true)}
-            className="rounded-full border-2 border-emerald-500 dark:border-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-300 transition hover:border-emerald-600 hover:bg-emerald-500/20 dark:hover:border-emerald-300 dark:hover:bg-emerald-500/30 hover:text-emerald-800 dark:hover:text-emerald-200 shadow-sm dark:shadow-none ml-auto"
+            className="rounded-full border-2 border-emerald-500 dark:border-emerald-400 bg-emerald-500/10 dark:bg-emerald-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-300 transition hover:border-emerald-600 hover:bg-emerald-500/20 dark:hover:border-emerald-300 dark:hover:bg-emerald-500/30 hover:text-emerald-800 dark:hover:text-emerald-200 shadow-sm dark:shadow-none"
           >
             ⛶ Fullscreen
           </button>
         </div>
 
-      {showDiffView && canShowDiff ? (
-        <JsonDiffView
-          leftJson={leftValue}
-          rightJson={rightValue}
-          diffs={diffs}
-          leftJsonValue={leftError ? null : (() => {
-            try {
-              return JSON.parse(leftValue) as JsonValue;
-            } catch {
-              return null;
-            }
-          })()}
-          rightJsonValue={rightError ? null : (() => {
-            try {
-              return JSON.parse(rightValue) as JsonValue;
-            } catch {
-              return null;
-            }
-          })()}
-        />
-      ) : (
         <div className="grid gap-6 lg:grid-cols-2">
           <JsonCompareTextarea
             value={leftValue}
@@ -193,37 +143,12 @@ const JsonCompareInput = ({
             onClear={handleRightClear}
           />
         </div>
-      )}
       </div>
 
       {isFullscreen && (
         <div className="fixed inset-0 z-50 flex flex-col bg-white dark:bg-slate-900">
           <div className="flex items-center justify-between border-b border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 p-4">
-            <div className="flex items-center gap-3">
-              <span className="text-xs uppercase tracking-[0.2em] text-emerald-500 dark:text-emerald-300 font-semibold">Compare Mode</span>
-              {canShowDiff && (
-                <div className="flex rounded-full border border-gray-200 dark:border-white/10 bg-white dark:bg-black/30 p-1 text-gray-800 dark:text-white shadow-sm dark:shadow-none">
-                  <button
-                    type="button"
-                    onClick={() => setShowDiffView(false)}
-                    className={`rounded-full px-3 py-1 text-xs font-medium transition ${
-                      !showDiffView ? "bg-emerald-500 text-white dark:bg-emerald-400/20 dark:text-white" : "text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-white"
-                    }`}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowDiffView(true)}
-                    className={`rounded-full px-3 py-1 text-xs font-medium transition ${
-                      showDiffView ? "bg-amber-500 text-white dark:bg-amber-400/20 dark:text-amber-300" : "text-gray-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-200"
-                    }`}
-                  >
-                    Diff
-                  </button>
-                </div>
-              )}
-            </div>
+            <span className="text-xs uppercase tracking-[0.2em] text-emerald-500 dark:text-emerald-300 font-semibold">Compare Mode</span>
             <button
               type="button"
               title="Exit Fullscreen (Esc)"
@@ -235,31 +160,7 @@ const JsonCompareInput = ({
             </button>
           </div>
           <div className="flex-1 min-h-0 overflow-hidden p-4">
-            {showDiffView && canShowDiff ? (
-              <div className="h-full">
-                <JsonDiffView
-                  leftJson={leftValue}
-                  rightJson={rightValue}
-                  diffs={diffs}
-                  leftJsonValue={leftError ? null : (() => {
-                    try {
-                      return JSON.parse(leftValue) as JsonValue;
-                    } catch {
-                      return null;
-                    }
-                  })()}
-                  rightJsonValue={rightError ? null : (() => {
-                    try {
-                      return JSON.parse(rightValue) as JsonValue;
-                    } catch {
-                      return null;
-                    }
-                  })()}
-                  isFullscreen={true}
-                />
-              </div>
-            ) : (
-              <div className="grid h-full gap-4 lg:grid-cols-2">
+            <div className="grid h-full gap-4 lg:grid-cols-2">
                 <div className="h-full min-h-0">
                   <JsonCompareTextarea
                     value={leftValue}
@@ -291,7 +192,6 @@ const JsonCompareInput = ({
                   />
                 </div>
               </div>
-            )}
           </div>
         </div>
       )}

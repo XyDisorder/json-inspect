@@ -14,9 +14,11 @@ const JsonHighlightOverlay = ({ segments, highlightRef, matchRefs, isFullscreen 
     <pre
       ref={highlightRef}
       aria-hidden
-      className={`pointer-events-none absolute inset-0 z-0 ${isFullscreen ? "" : "max-h-[520px]"} overflow-hidden ${isFullscreen ? "rounded-lg" : "rounded-2xl"} bg-white dark:bg-slate-900/80 p-4 text-sm leading-6 text-transparent ${isFullscreen ? "" : "shadow-inner"} whitespace-pre-wrap break-words`}
+      className={`pointer-events-none absolute inset-0 z-0 ${isFullscreen ? "" : "max-h-[520px]"} overflow-auto ${isFullscreen ? "rounded-lg" : "rounded-2xl"} bg-transparent p-4 text-sm leading-6 text-transparent whitespace-pre-wrap break-words [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]`}
       style={{
         fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
       }}
     >
       {segments.map((segment, index) =>
@@ -28,7 +30,7 @@ const JsonHighlightOverlay = ({ segments, highlightRef, matchRefs, isFullscreen 
                 matchRefs.current[segment.matchIndex] = element;
               }
             }}
-            className="rounded bg-[#ffe600] px-0.5 text-transparent shadow-[0_0_0_1px_rgba(0,0,0,0.35)]"
+            className="rounded bg-[#ffe600]/60 px-0.5 text-transparent"
           >
             {segment.text}
           </mark>

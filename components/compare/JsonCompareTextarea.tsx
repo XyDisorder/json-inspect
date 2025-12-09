@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import type { JsonValue } from "@/lib/treeBuilder";
 import type { JsonDiff } from "@/lib/jsonCompare";
 import { useJsonCompareHighlight, type LineSegment } from "@/lib/useJsonCompareHighlight";
+import { useJsonSearch } from "@/lib/useJsonSearch";
+import JsonSearchBar from "@/components/ui/JsonSearchBar";
+import JsonHighlightOverlay from "@/components/ui/JsonHighlightOverlay";
 
 type JsonCompareTextareaProps = {
   value: string;
@@ -49,10 +52,12 @@ const JsonCompareTextarea = ({
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [parsedJson, setParsedJson] = useState<JsonValue | null>(null);
-  const highlightRef = useRef<HTMLPreElement>(null);
+  const diffHighlightRef = useRef<HTMLPreElement>(null);
+  const searchHighlightRef = useRef<HTMLPreElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { highlightLines, segments } = useJsonCompareHighlight(value, diffs, isLeft, parsedJson);
+  const search = useJsonSearch(value, textareaRef, searchHighlightRef);
 
   // Check if JSON is valid on mount and when value changes
   useEffect(() => {
@@ -71,21 +76,26 @@ const JsonCompareTextarea = ({
     }
   }, [value]);
 
-  // Sync scroll between textarea and overlay
+  // Sync scroll between textarea and overlays
   useEffect(() => {
     const textarea = textareaRef.current;
-    const overlay = highlightRef.current;
-    if (!textarea || !overlay) return;
+    const diffOverlay = diffHighlightRef.current;
+    const searchOverlay = searchHighlightRef.current;
+    if (!textarea) return;
 
-    const handleScroll = () => {
-      if (overlay) {
-        overlay.scrollTop = textarea.scrollTop;
-        overlay.scrollLeft = textarea.scrollLeft;
+    const syncScroll = () => {
+      if (diffOverlay) {
+        diffOverlay.scrollTop = textarea.scrollTop;
+        diffOverlay.scrollLeft = textarea.scrollLeft;
+      }
+      if (searchOverlay) {
+        searchOverlay.scrollTop = textarea.scrollTop;
+        searchOverlay.scrollLeft = textarea.scrollLeft;
       }
     };
 
-    textarea.addEventListener("scroll", handleScroll, { passive: true });
-    return () => textarea.removeEventListener("scroll", handleScroll);
+    textarea.addEventListener("scroll", syncScroll, { passive: true });
+    return () => textarea.removeEventListener("scroll", syncScroll);
   }, []);
 
   const handleChange = (newValue: string) => {
@@ -126,6 +136,15 @@ const JsonCompareTextarea = ({
             </button>
           </div>
         </div>
+        <JsonSearchBar
+          searchTerm={search.searchTerm}
+          onSearchChange={search.setSearchTerm}
+          matchCount={search.matchCount}
+          matchIndex={search.safeMatchIndex}
+          onPrev={() => search.goToMatch(-1)}
+          onNext={() => search.goToMatch(1)}
+          minimal={true}
+        />
       <div className={`relative ${isFullscreen ? "flex-1 min-h-0" : ""}`}>
         <button
           type="button"
@@ -150,9 +169,13 @@ const JsonCompareTextarea = ({
           value={value}
           onChange={(event) => handleChange(event.target.value)}
           onScroll={() => {
-            if (highlightRef.current && textareaRef.current) {
-              highlightRef.current.scrollTop = textareaRef.current.scrollTop;
-              highlightRef.current.scrollLeft = textareaRef.current.scrollLeft;
+            if (diffHighlightRef.current && textareaRef.current) {
+              diffHighlightRef.current.scrollTop = textareaRef.current.scrollTop;
+              diffHighlightRef.current.scrollLeft = textareaRef.current.scrollLeft;
+            }
+            if (searchHighlightRef.current && textareaRef.current) {
+              searchHighlightRef.current.scrollTop = textareaRef.current.scrollTop;
+              searchHighlightRef.current.scrollLeft = textareaRef.current.scrollLeft;
             }
           }}
           className={`relative z-10 ${isFullscreen ? "absolute inset-0 h-full" : "h-[520px]"} w-full resize-none ${isFullscreen ? "rounded-lg" : "rounded-2xl"} border bg-white dark:bg-slate-900/80 p-4 text-sm leading-6 text-gray-900 dark:text-slate-100 ${isFullscreen ? "" : "shadow-inner"} outline-none transition focus:ring-2 ${
@@ -168,11 +191,13 @@ const JsonCompareTextarea = ({
         />
         {!error && highlightLines.size > 0 && segments.length > 0 && (
           <pre
-            ref={highlightRef}
+            ref={diffHighlightRef}
             aria-hidden
-            className={`pointer-events-none absolute inset-0 z-20 ${isFullscreen ? "" : "max-h-[520px]"} overflow-hidden ${isFullscreen ? "rounded-lg" : "rounded-2xl"} bg-transparent p-4 text-sm leading-6 text-transparent whitespace-pre-wrap break-words`}
+            className={`pointer-events-none absolute inset-0 z-20 ${isFullscreen ? "" : "max-h-[520px]"} overflow-auto ${isFullscreen ? "rounded-lg" : "rounded-2xl"} bg-transparent p-4 text-sm leading-6 text-transparent whitespace-pre-wrap break-words [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]`}
             style={{
               fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
             }}
           >
             {segments.map((segment, index) =>
@@ -189,6 +214,16 @@ const JsonCompareTextarea = ({
               ),
             )}
           </pre>
+        )}
+        {search.searchTerm && (
+          <div className="pointer-events-none absolute inset-0 z-30">
+            <JsonHighlightOverlay
+              segments={search.highlightSegments}
+              highlightRef={searchHighlightRef}
+              matchRefs={search.matchRefs}
+              isFullscreen={isFullscreen}
+            />
+          </div>
         )}
       </div>
       {error ? (
